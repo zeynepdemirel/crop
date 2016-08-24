@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Crop Box</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="query.ui.touch-punch.js"></script>
+    <script>$('#nrs').draggable();</script>
+    <style>
+        .container
+        {
+            position: absolute;
+            top: 10%; left: 10%; right: 0; bottom: 0;
+        }
+        .action
+        {
+            width: 400px;
+            height: 30px;
+            margin: 10px 0;
+        }
+        .cropped>img
+        {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="../cropbox.js"></script>
+<div class="container">
+    <div class="imageBox">
+    	
+    	<img id="nrs" src="crop_area.png">
+        <div class="thumbBox"></div>
+        <div class="spinner" style="display: none">Loading...</div>
+    </div>
+    <div class="action" style="width:300px;">
+        <input type="file" id="file" style="float:left; width: 200px">
+        <input type="button" id="btnCrop" value="Crop" style="float: right">
+        <input type="button" id="btnZoomIn" value="+" style="float: right">
+        <input type="button" id="btnZoomOut" value="-" style="float: right">
+        <input type="button" id="btnRotateRight" value=">" style="float: right">
+        <input type="button" id="btnRotateLeft" value="<" style="float: right">
+    </div>
+    <div class="cropped">
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(window).load(function() {
+        var options =
+        {
+            thumbBox: '.thumbBox',
+            spinner: '.spinner',
+            imgSrc: 'back_hero.jpg'
+        }
+        var cropper = $('.imageBox').cropbox(options);
+        $('#file').on('change', function(){
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                options.imgSrc = e.target.result;
+                cropper = $('.imageBox').cropbox(options);
+				
+            }
+            reader.readAsDataURL(this.files[0]);
+            this.files = [];
+        })
+        $('#btnCrop').on('click', function(){
+            var img = cropper.getDataURL();
+            $('.cropped').append('<img src="'+img+'">');
+        })
+        $('#btnZoomIn').on('click', function(){
+            cropper.zoomIn();
+        })
+        $('#btnZoomOut').on('click', function(){
+            cropper.zoomOut();
+        })
+		 $('#btnRotateRight').on('click', function(){
+            cropper.rotateRight();
+        })
+        $('#btnRotateLeft').on('click', function(){
+            cropper.rotateLeft();
+        })
+    });
+</script>
+
+</body>
+</html>
